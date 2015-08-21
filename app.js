@@ -27,6 +27,25 @@ var firstblog = new Blogs({
     meta: { votes : 1, favs : 4}
 });
 
+
+var secondblog = new Blogs({
+    title: "中文的测试",
+    author: "中国作家",
+    body: "大家早上好，我们组做的是一个新闻聚合网站",
+    comments: [{ body: "好!", date: Date.now()}, { body : "支持!", date: Date.now() - 42 }],
+    hidden : false,
+    meta: { votes : 6, favs : 8}
+});
+
+var thirdblog = new Blogs({
+    title: "中文繁體測試",
+    author: "HK作家",
+    body: "大家早晨，我地組做嘅是一個新聞聚合類網站",
+    comments: [{ body: "好哇！", data: Date.now()}, { body : "識得唔識得", date: Date.now() - 56}],
+    hidden: false,
+    meta: { votes : 4, favs : 5}
+})
+
 console.log(firstblog.author);
 firstblog.printout();
 
@@ -38,10 +57,15 @@ db.on('error', function(err) {
 
 db.once('open', function(callback) {
     console.log("There's a connection to the mongodb server!!!");
-    firstblog.save(function(err, fb) {
-        if (err) return console.log(err);
-        // console.log(fb);
-    })
+    // firstblog.save(function(err, fb) {
+    //     if (err) return console.log(err);
+    // })
+    // secondblog.save(function(err, sb) {
+    //     if (err) return console.log(err);
+    // })
+    // thirdblog.save(function(err, tb) {
+    //     if (err) return console.log(err);
+    // })
 });
 
 Blogs.find({'meta.votes':1}, 'meta body comments', function(err, blogs) {
@@ -49,3 +73,11 @@ Blogs.find({'meta.votes':1}, 'meta body comments', function(err, blogs) {
         console.log(moment(blogs[i].comments[0].date).format('YYYY-MM-DD HH:mm:ss'));
     }
 });
+
+Blogs.remove({'meta.votes':4}, function (err) {
+    console.log(err);
+});
+
+Blogs.update({'author':"著名中国作家"}, {$set: {'author':"中国作家", 'meta.votes':123}}, function(err, raw) {
+    console.log(err + "\n" + raw);
+})
