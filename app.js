@@ -1,5 +1,12 @@
 var mongoose = require('mongoose');
 var moment = require('moment');
+var express = require('express');
+var exphbs = require('express-handlebars');
+
+var app = express();
+app.engine('.hbs', exphbs({defaultLayout: 'Single', extname: '.hbs'}));
+app.set('view engine', '.hbs');
+
 var Schema = mongoose.Schema;
 
 var BlogSchema = new Schema({
