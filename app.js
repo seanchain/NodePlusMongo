@@ -1,90 +1,66 @@
-var mongoose = require('mongoose');
-var moment = require('moment');
 var express = require('express');
-var exphbs = require('express-handlebars');
+var handlebars = require('express-handlebars').create({defaultLayout:'main'});
+var fortune = require('./lib/fortune.js');
+
+
 
 var app = express();
-app.engine('.hbs', exphbs({defaultLayout: 'Single', extname: '.hbs'}));
-app.set('view engine', '.hbs');
 
-var Schema = mongoose.Schema;
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
 
-var BlogSchema = new Schema({
-    title : String,
-    author : String,
-    body : String,
-    comments : [{ body : String, date : Date }],
-    date : { type : Date, default : Date.now },
-    hidden : Boolean,
-    meta: { votes: Number, favs: Number }
-});
-// Mongo 的 Blog Schema
+app.set('port', process.env.PORT || 8888);
 
-BlogSchema.methods.printout = function() {
-    console.log(this.title + "***" + this.author);
-}
+app.use(express.static(__dirname + '/public')); // handle static files or views
 
-var Blogs = mongoose.model('Blogs', BlogSchema);
-var firstblog = new Blogs({
-    title: "Hola, mundo",
-    author: "Famous Author",
-    body: "This is the hola mundo passage",
-    comments: [{ body: "good!", date: Date.now()}, { body : "excited!", date: Date.now() - 42 }],
-    hidden : false,
-    meta: { votes : 1, favs : 4}
+// Use app.get to add the routes, and it doesn't care about the case or the trailing slash
+app.get('/', function(req, res) {
+    // res.type('text/plain');
+    // res.send('Meadowlark Travel');
+    res.render('home');
 });
 
-
-var secondblog = new Blogs({
-    title: "中文的测试",
-    author: "中国作家",
-    body: "大家早上好，我们组做的是一个新闻聚合网站",
-    comments: [{ body: "好!", date: Date.now()}, { body : "支持!", date: Date.now() - 42 }],
-    hidden : false,
-    meta: { votes : 6, favs : 8}
+app.get('/about', function(req, res) {
+    // res.type('text/plain');
+    // res.send('About Meadowlark Travel');
+    // res.render('about');
+    res.render('about', { fortune:fortune.getFortune() });
 });
 
-var thirdblog = new Blogs({
-    title: "中文繁體測試",
-    author: "HK作家",
-    body: "大家早晨，我地組做嘅是一個新聞聚合類網站",
-    comments: [{ body: "好哇！", data: Date.now()}, { body : "識得唔識得", date: Date.now() - 56}],
-    hidden: false,
-    meta: { votes : 4, favs : 5}
-})
-
-console.log(firstblog.author);
-firstblog.printout();
-
-mongoose.connect('mongodb://localhost/blog');
-var db = mongoose.connection;
-db.on('error', function(err) {
-    console.log("There is a fatal error!");
-});
-
-db.once('open', function(callback) {
-    console.log("There's a connection to the mongodb server!!!");
-    // firstblog.save(function(err, fb) {
-    //     if (err) return console.log(err);
-    // })
-    // secondblog.save(function(err, sb) {
-    //     if (err) return console.log(err);
-    // })
-    // thirdblog.save(function(err, tb) {
-    //     if (err) return console.log(err);
-    // })
-});
-
-Blogs.find({'meta.votes':1}, 'meta body comments', function(err, blogs) {
-    for (var i = 0; i < blogs.length; i ++) {
-        console.log(moment(blogs[i].comments[0].date).format('YYYY-MM-DD HH:mm:ss'));
+app.get('/headers', function(req, res) {
+    res.set('Content-Type:text/plain');
+    var header = {
+        host: req.headers['host'],
+        connection: req.headers['connection'],
+        cache_control: req.headers['cache-control'],
+        accept: req.headers['accept'],
+        user_agent: req.headers['user-agent'],
+        accept_encoding: req.headers['accept-encoding'],
+        accept_language: req.headers['accept-language']
     }
+    console.log(header['host']);
+    res.render('headers', { headers:req });
 });
 
-Blogs.remove({'meta.votes':4}, function (err) {
-    console.log(err);
+// Use app.use method to add the middleware, it can be a catch-all handler for anything that didn't get matched by a route, and if we put the 404 handler above the routes, the routes won't work and the result will eventually be 404
+// custom 404 page
+app.use(function(req, res) {
+    // res.type('html/plain');
+    // res.status(404);
+    // res.send('404 - Not Found');
+    res.status(404);
+    res.render('404');
 });
 
-Blogs.update({'author':"著名中国作家"}, {$set: {'author':"中国作家", 'meta.votes':123}}, function(err, raw) {
-    console.log(err + "\n" + raw);
-})
+// custom 500 page
+app.use(function(req, res) {
+    // res.type('html/plain');
+    // res.status(500);
+    // res.send('500 - Server Error');
+    res.status(500);
+    res.send('500'); // No longer need to specify the status code or the content type
+});
+
+app.listen(app.get('port'), function() {
+    console.log('Express started on http://localhost:' + app.get('port') + '; press Ctrl-C to  terminate');
+});
