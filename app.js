@@ -1,7 +1,7 @@
 var express = require('express');
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var fortune = require('./lib/fortune.js');
-
+var weather = require('./lib/weather.js');
 
 
 var app = express();
@@ -59,6 +59,13 @@ app.use(function(req, res) {
     // res.send('500 - Server Error');
     res.status(500);
     res.send('500'); // No longer need to specify the status code or the content type
+});
+
+app.use(function(req, res, next) {
+    if(!res.locals.partials) res.locals.partials = {};
+    res.locals.partials.weather = weather.getWeatherData();
+    console.log(weather.getWeatherData());
+    next();
 });
 
 app.listen(app.get('port'), function() {

@@ -1,0 +1,15 @@
+<!-- The partials are for the widgets you want to reuse on different pages. -->
+
+<div class="weatherWidget">
+    {{#each partials.weather.locations}}
+    <!-- Because we don't want to interfere with the context specified by individual views, so we put the partial context in the partials object -->
+        <div class="location">
+            <h3>{{name}}</h3>
+            <a href="{{forcastUrl}}">
+                <img src="{{iconsrc}}" alt="{{weather}}" />
+                {{weather}}, {{temp}}
+            </a>
+        </div>
+    {{/each}}
+    <small>Source: <a href="http://www.wunderground.com">Weather Underground</a></small>
+</div>
