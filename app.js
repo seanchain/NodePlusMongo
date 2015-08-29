@@ -42,6 +42,10 @@ app.get('/headers', function(req, res) {
     res.render('headers', { headers:req });
 });
 
+app.get('/form', function(req, res) {
+    res.render('form');
+})
+
 // Use app.use method to add the middleware, it can be a catch-all handler for anything that didn't get matched by a route, and if we put the 404 handler above the routes, the routes won't work and the result will eventually be 404
 // custom 404 page
 app.use(function(req, res) {
