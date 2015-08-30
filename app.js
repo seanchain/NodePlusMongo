@@ -12,6 +12,7 @@ app.set('view engine', 'handlebars');
 app.set('port', process.env.PORT || 8888);
 
 app.use(express.static(__dirname + '/public')); // handle static files or views
+app.use(express.static(__dirname + '/bower_components')); // handle bower files
 
 // Use app.get to add the routes, and it doesn't care about the case or the trailing slash
 app.get('/', function(req, res) {
