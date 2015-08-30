@@ -2,6 +2,7 @@ var express = require('express');
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 var fortune = require('./lib/fortune.js');
 var weather = require('./lib/weather.js');
+var db = require('./lib/db.js');
 
 
 var app = express();
@@ -13,12 +14,20 @@ app.set('port', process.env.PORT || 8888);
 
 app.use(express.static(__dirname + '/public')); // handle static files or views
 app.use(express.static(__dirname + '/bower_components')); // handle bower files
+app.use(require('body-parser')());
 
 // Use app.get to add the routes, and it doesn't care about the case or the trailing slash
 app.get('/', function(req, res) {
     // res.type('text/plain');
     // res.send('Meadowlark Travel');
     res.render('home');
+});
+
+app.post('/process', function(req, res) {
+    console.log(req.body.color);
+    res.send("<h1>Hola, Mundo</h1>");
+    var res = db.insertARecord(1245, req.body.color);
+    console.log(res);
 });
 
 app.get('/about', function(req, res) {
