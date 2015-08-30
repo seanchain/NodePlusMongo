@@ -52,6 +52,10 @@ app.get('/headers', function(req, res) {
     res.render('headers', { headers:req });
 });
 
+app.get('/register', function(req, res) {
+    res.render('register');
+})
+
 app.get('/form', function(req, res) {
     res.render('form');
 })
