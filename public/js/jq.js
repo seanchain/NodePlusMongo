@@ -7,11 +7,21 @@ $(function() {
   });
 
 
-  $("#submit").on('click', function () {
+  $("#submit").click(function () {
     var userid = $("#userid").val();
     var email = $("#email").val();
     var passwd = $("#passwd").val();
-    alert(userid + "---" + email + "---" + passwd);
-    $("#regform").submit();
+    console.log(userid + "---" + email + "---" + passwd);
+    if (userid == '123') {
+      console.log("got it");
+      $.post('/checkValidation', {userid:userid}, function(res) {
+        if (res == "success") {
+          window.location.href = "/";
+        }
+        else {
+          alert("wrong!");
+        }
+      });
+    }
   });
 });

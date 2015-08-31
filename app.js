@@ -28,13 +28,20 @@ app.get('/', function(req, res) {
 app.post('/process', function(req, res) {
   console.log(req.body.color);
   res.send("<h1>Hola, Mundo</h1>");
-  var res = db.insertARecord(1245, req.body.color);
-  console.log(res);
+  var ret = db.insertARecord(1245, req.body.color);
+  console.log(ret);
 });
 
-app.post('/registrationProcess', function () {
+app.post('/registrationProcess', function (req, res) {
+  db.addANewUser(req.body.userid, req.body.email, req.body.passwd);
   res.send('Registration Successfully');
 });
+
+app.post('/checkValidation', function(req, res) {
+  if (req.body.userid == "123")
+    res.end("success");
+  else res.end("wrong")
+})
 
 app.get('/about', function(req, res) {
   // res.type('text/plain');
