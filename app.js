@@ -32,6 +32,10 @@ app.post('/process', function(req, res) {
   console.log(res);
 });
 
+app.post('/registrationProcess', function () {
+  res.send('Registration Successfully');
+});
+
 app.get('/about', function(req, res) {
   // res.type('text/plain');
   // res.send('About Meadowlark Travel');

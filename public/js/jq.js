@@ -1,5 +1,17 @@
 $(function() {
+
+  window.addEventListener('keydown', function (event) {
+    if(event.keyCode == 13) {
+      $("#submit").click();
+    }
+  });
+
+
   $("#submit").on('click', function () {
-    alert("Hola, Mundo");
+    var userid = $("#userid").val();
+    var email = $("#email").val();
+    var passwd = $("#passwd").val();
+    alert(userid + "---" + email + "---" + passwd);
+    $("#regform").submit();
   });
 });

@@ -1,14 +1,14 @@
 <div class="row">
   <div class="small-9 small-centered columns">
-    <form>
+    <form id="regform" action="/registrationProcess" method="post">
       <fieldset>
         <legend>User Registration</legend>
         <label for="userid">User ID</label>
-        <input type="text" name="userid" value="" placeholder="Please input your user ID">
+        <input type="text" name="userid" value="" placeholder="Please input your user ID" id="userid">
         <label for="emal">Email</label>
-        <input type="text" name="email" value="" placeholder="Please input your email">
+        <input type="text" name="email" value="" placeholder="Please input your email" id="email">
         <label for="emal">Password</label>
-        <input type="password" name="passwd" value="" placeholder="Please input your password">
+        <input type="password" name="passwd" value="" placeholder="Please input your password" id="passwd">
         <button type="button" id="submit" class="button tiny primary" name="button">Submit</button>
       </fieldset>
     </form>
