@@ -9,7 +9,6 @@ $(function() {
 		var userid = $("#userid").val();
 		var email = $("#email").val();
 		var passwd = $("#passwd").val();
-		console.log(userid + "---" + email + "---" + passwd);
 		if (userid == '123') {
 			console.log("got it");
 			$.post('/checkValidation', {

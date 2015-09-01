@@ -2,6 +2,7 @@ var express = require('express');
 var handlebars = require('express-handlebars').create({
   defaultLayout: 'main'
 });
+var crypt = require('./lib/crypt.js');
 var fortune = require('./lib/fortune.js');
 var weather = require('./lib/weather.js');
 var db = require('./lib/db.js');
@@ -41,6 +42,15 @@ app.post('/checkValidation', function(req, res) {
   if (req.body.userid == "123")
     res.end("success");
   else res.end("wrong")
+});
+
+app.post('/loginProcess', function (req, res) {
+  if(req.body.useridoremail == '123' && req.body.passwd == '456') {
+    console.log("Authentication successfully!");
+    res.redirect('/');
+  }
+  else
+    console.log("Authentication failed");
 })
 
 app.get('/about', function(req, res) {
@@ -50,6 +60,16 @@ app.get('/about', function(req, res) {
   res.render('about', {
     fortune: fortune.getFortune()
   });
+});
+
+app.get('/login', function(req, res) {
+  res.render('login');
+});
+
+// Test the crypto-js modules
+app.get('/crypt', function (req, res) {
+  var str = 'Chen Sihang';
+  res.send(crypt.MD5(str) + "<br />" + crypt.SHA1(str));
 });
 
 app.get('/headers', function(req, res) {
