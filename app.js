@@ -51,7 +51,7 @@ app.post('/loginProcess', function (req, res) {
   }
   else
     console.log("Authentication failed");
-})
+});
 
 app.get('/about', function(req, res) {
   // res.type('text/plain');
@@ -68,7 +68,7 @@ app.get('/login', function(req, res) {
 
 // Test the crypto-js modules
 app.get('/crypt', function (req, res) {
-  var str = 'Chen Sihang';
+  var str = 'Another Stuff';
   res.send(crypt.MD5(str) + "<br />" + crypt.SHA1(str));
 });
 
